@@ -1,0 +1,24 @@
+BetaSeries Objective-C Framework
+
+En construction, pour le moment, il permet déjà de
+faire des requetes, directement, et d'avoir les resultats dans 
+un NSDictionary...
+
+Absolument pas testé pour l'instant...
+
+Mais en théorie on peut faire fonctionner le code de cette
+ manière pour le moment :
+
+BSRequest *request = [BSRequest new];
+	   request.APIKey = @"1234";
+	   request.category = BSRequestCategoryTimeline;
+	   request.method = BSRequestMethodHome;
+           request.asynchronous = NO;
+
+NSDictionary homeTimeline = [request send];
+
+
+/////////
+
+Inclusion du Framework JSON provenant de :
+https://github.com/stig/json-framework
