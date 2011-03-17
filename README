@@ -15,7 +15,7 @@ BSRequest *request = [BSRequest new];
 	   request.method = BSRequestMethodHome;
            request.asynchronous = NO;
 
-NSDictionary homeTimeline = [request send];
+NSDictionary *homeTimeline = [request send];
 
 
 /////////
