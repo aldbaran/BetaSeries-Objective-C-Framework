@@ -8,6 +8,45 @@
 
 #import "BSRequest.h"
 
+NSString * const BSRequestCategories[] = {
+	@"comments",
+    @"members",
+    @"planning",
+    @"shows",
+    @"subtitles",
+    @"timeline"
+};
+
+NSString * const BSRequestMethods[] = {
+	@"add",
+	@"auth",
+    @"badges",
+    @"delete",
+    @"destroy",
+    @"display",
+    @"downloaded",
+    @"episode",
+    @"episodes",
+    @"friends",
+    @"general",
+    @"home",
+    @"infos",
+    @"is_active",
+    @"last",
+    @"member",
+    @"note",
+    @"notifications",
+    @"post/episode",
+    @"post/member",
+    @"post/show",
+    @"recommend",
+    @"remove",
+    @"search",
+    @"show",
+    @"signup",
+    @"watched"
+};
+
 @interface BSRequest (private)
 
 -(NSString *)_pathForCategory:(BSRequestCategory)aCategory 
@@ -57,7 +96,7 @@
         category = BSRequestCategoryTimeline;
         method = BSRequestMethodHome;
         object = nil;
-        options = [NSDictionary new];
+        options = [BSRequestOptions new];
         asynchronous = NO;
         delegate = nil;
     }
@@ -79,9 +118,11 @@
 
     [_request setURL:[NSURL URLWithString:[self _URLStringForRequest]]];
     
+    NSLog(@"sending : %@", [_request.URL absoluteString]);
+    
     [_request setTimeoutInterval:timeout];
     [_request setValue:userAgent forHTTPHeaderField:@"User-Agent"];
-    
+        
     if (asynchronous) {
          _connection = [[NSURLConnection alloc] initWithRequest:_request 
                                                        delegate:self];
@@ -175,17 +216,7 @@
     
     [options release];
     options = nil;
-    
-    [_connection cancel];
-    [_connection release];
-    _connection = nil;
-    
-    [_request release];
-    _request = nil;
-    
-    [_datas release];
-    _datas = nil;
-    
+        
     [super dealloc];
 }
 
@@ -201,7 +232,7 @@
 {
     
     NSMutableString *string = [NSMutableString new];
-    
+            
     [string appendString:BETASERIES_API_BASE_URL];
     [string appendString:BSRequestCategories[aCategory]];
     [string appendString:@"/"];
@@ -215,18 +246,18 @@
     [string appendString:@".json?"];
     
     if (anAPIKey != nil) {
-        [someOptions setObject:anAPIKey forKey:@"key"];
+        [string appendFormat:@"key=%@&", anAPIKey];
     }
 
     if (aToken != nil) {
-        [someOptions setObject:aToken forKey:@"token"];
+        [string appendFormat:@"token=%@&", aToken];
     }
 
     for (NSString *key in [someOptions allKeys]) {
         [string appendFormat:@"%@=%@&", key, [someOptions valueForKey:key]];
     }
-    
-    return [NSString stringWithString:string];
+        
+    return [[NSString alloc] initWithString:string];
 }
 
 
@@ -236,7 +267,14 @@
 
 -(NSDictionary *)_parseDatas {
     SBJsonParser *parser = [[SBJsonParser new] autorelease];
-    return [parser objectWithData:_datas];
+    
+    NSDictionary *returnedObject = [parser objectWithData:_datas];
+    
+    if(returnedObject) {
+        return [[returnedObject objectForKey:@"root"] retain];
+    }
+    
+    return nil;
 }
 
 @end

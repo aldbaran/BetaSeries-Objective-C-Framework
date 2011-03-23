@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BetaSeries_Prefix.h"
+
+@class BSRequest;
 
 @interface BetaSeries : NSObject {
 
@@ -34,16 +35,19 @@
 
 +(NSDictionary *)registerWithUsername:(NSString *)username 
                          password:(NSString *)password 
-                         andEmail:(NSString *)email;
+                         andEmail:(NSString *)email 
+                        andAPIKey:(NSString *)APIKey;
 
 +(NSString *)obtainTokenWithUsername:(NSString *)username 
-                         andPassword:(NSString *)password;
+                         andPassword:(NSString *)password 
+                           andAPIKey:(NSString *)APIKey;
 
 +(NSString *)obtainTokenWithUsername:(NSString *)username 
-                      andPasswordMD5:(NSString *)passwordMD5;
+                      andPasswordMD5:(NSString *)passwordMD5 
+                           andAPIKey:(NSString *)APIKey;
 
-+(BOOL)isActiveToken:(NSString *)bs_token;
-+(void)destroyToken:(NSString *)bs_token;
++(BOOL)isActiveToken:(NSString *)token withAPIKey:(NSString *)APIKey;
++(void)destroyToken:(NSString *)token withAPIKey:(NSString *)APIKey;
   
 #pragma mark -
 #pragma mark init

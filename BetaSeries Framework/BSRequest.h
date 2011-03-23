@@ -13,6 +13,9 @@
 #import "BSRequest_Definitions.h"
 #import "BSRequestDelegate.h"
 
+#define BETASERIES_API_BASE_URL @"http://api.betaseries.com/"
+#define BETASERIES_FRAMEWORK_USER_AGENT @"Objective-C BetaSeries Library — PofMagicfingers (v1.0)"
+
 @interface BSRequest : NSObject {
 
 @protected
